@@ -7,7 +7,7 @@ Social media benefits includes expanding ones social networks and keeping users 
 
 In this project, your task is to define a 'net' or 'filter' to detect lies on social media. To keep things simple, you can decide to work on any of the social media platforms. Your project should collect data from the preferred social media platform and test your hypothesis for results. Your testing procedure could be live too.
 
-#links
+# Links
 1. https://www.politico.com/news/2020/03/12/social-media-giants-are-fighting-coronavirus-fake-news-its-still-spreading-like-wildfire-127038
 2. https://www.loc.gov/law/help/social-media-disinformation/compsum.php
 3. https://www.pewresearch.org/internet/2017/10/19/the-future-of-truth-and-misinformation-online/
