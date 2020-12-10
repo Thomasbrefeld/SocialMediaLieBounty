@@ -1,7 +1,15 @@
 import csv
+import os
+import json
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.keys import Keys
+import time
 
-TOPIC_FILE = 'topic_catigorize.csv'
-WEBSITE_FILE = 'topic_to_website.csv'
+proirTweetsFile = 'logs/proirTweets.txt'
+jsonFile = "logs/tweets.json"
+topicFile = 'topic_catigorize.csv'
+websiteFile = 'topic_to_website.csv'
 
 def readFile(fileName):
     '''
@@ -26,7 +34,7 @@ def reveiwText(inputText):
     within the topic_catigorize.csv file
     '''
     inputText = str(inputText).strip().lower() #cleans the input data
-    fileInput = readFile(TOPIC_FILE) #get the topcs in form of a list
+    fileInput = readFile(topicFile) #get the topcs in form of a list
     
     topicsFound = []
     for topic in fileInput: #loop through the topics 
@@ -60,7 +68,7 @@ def constructTweet(topics):
     
     msg += "This might include missleading information, ensure you do you own reasearch at the following website(s): "
 
-    fileInput = readFile(WEBSITE_FILE) # get the topic links
+    fileInput = readFile(websiteFile) # get the topic links
 
     for topic in topics: # loop throught the topics
         for line in fileInput: #loop through the lines
@@ -68,10 +76,73 @@ def constructTweet(topics):
                 msg += line[1] + " " #append the link to the message
     
     return msg #return the message
-        
 
-topics = reveiwText("Almost half a million Americans contract COVID-19 in past week as infections surge") #creates a test tweet
-if (len(topics) > 0): #if topics are found within the tweet
-    print(constructTweet(topics)) #print the tweet about missleading infomation
-else:
-    print("clean") #if no topics are found say the tweet is clean
+def getTweets():
+    os.system("snscrape --json --max-results 1 twitter-hashtag softwareengineeringliebounty >" + jsonFile)
+
+    if not os.path.exists(jsonFile):
+        return None
+
+    with open(jsonFile) as file:
+        return json.load(file)
+
+def isnew(link):
+    link = str(link)
+
+    with open(proirTweetsFile) as file:
+        for line in file:
+            if (link == line[:-1]):
+                return False
+    
+    with open(proirTweetsFile, 'a+') as file:
+        file.write(link + "\n")
+    
+    return True
+
+def publishTweet(url, tweet):
+    try:
+        driver=webdriver.Chrome("chromedriver.exe")
+        driver.get("https://twitter.com/login")
+        time.sleep(3)
+
+        driver.find_element_by_xpath("//input[@name='session[username_or_email]']").send_keys("SoftwareBot")
+        driver.find_element_by_xpath("//input[@name='session[password]']").send_keys("}7mdr~7Xa*,$LVn9XY~B.d!")
+        driver.find_element_by_xpath("//div[@data-testid='LoginForm_Login_Button']").click()
+        time.sleep(3)
+        driver.get(url)
+        time.sleep(3)
+        driver.find_element_by_xpath("//div[@aria-label='Reply']").click()
+        time.sleep(.1)
+
+        driver.find_element_by_class_name('DraftEditor-root').click()
+        element=driver.find_element_by_class_name('public-DraftEditorPlaceholder-root')
+        ActionChains(driver).move_to_element(element).send_keys(str(tweet)).perform()
+        driver.find_element_by_xpath("//div[@data-testid='tweetButton']").click()
+    except Exception as e:
+        print(e)
+    finally:
+        print("Tweet publishing finished!")
+        time.sleep(2)
+        driver.close()
+
+if __name__ == "__main__":
+    firstRun = True
+    while True:
+        if not firstRun is True:
+            for x in range(60):
+                if (x % 10 == 0):
+                    print("Refreshing in", str(60 - x), "seconds")
+                time.sleep(1)
+        else:
+            firstRun = False
+
+        tweet = getTweets()
+        if not isnew(tweet['url']):
+            print('no new tweet, skipping')
+            continue
+        
+        topics = reveiwText(tweet['content'])
+        if (len(topics) > 0): 
+            publishTweet(tweet['url'], constructTweet(topics))
+        else:
+            print("The tweet: \"" + str(tweet['content']) + "\" does not contain missleading information")
