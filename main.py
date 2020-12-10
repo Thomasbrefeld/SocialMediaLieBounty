@@ -82,15 +82,27 @@ def constructTweet(topics):
     return msg #return the message
 
 def getTweets():
-    os.system("snscrape --json --max-results 1 twitter-hashtag softwareengineeringliebounty >" + jsonFile)
+    '''
+    getTweets calls snscrape to get new tweets from the defined hashtag, the funcation will save the
+    information to a json file for later use. The funcation will return the json data type of the most
+    recent tweet, if there is no new tweet the function will return None
+    '''
+    try:
+        os.system("snscrape --json --max-results 1 twitter-hashtag softwareengineeringliebounty >" + jsonFile)
+        
+        if not os.path.exists(jsonFile):
+            return None
 
-    if not os.path.exists(jsonFile):
+        with open(jsonFile) as file:
+            return json.load(file)
+    except:
         return None
 
-    with open(jsonFile) as file:
-        return json.load(file)
-
-def isnew(link):
+def isNew(link):
+    '''
+    isNew take a link of a tweet and determines if the tweet has already been anaylised. If so
+    the funcation will return False, but if the tweet is new then the function will return True
+    '''
     link = str(link)
 
     with open(proirTweetsFile) as file:
@@ -104,6 +116,10 @@ def isnew(link):
     return True
 
 def publishTweet(url, tweet):
+    '''
+    publishTweet takes in a url and a tweet, this function will sign into Twitter and reply to the proir tweet 
+    with the generated information. 
+    '''
     try:
         driver=webdriver.Chrome("chromedriver.exe")
         driver.get(url)
@@ -122,27 +138,18 @@ def publishTweet(url, tweet):
         print(e)
     finally:
         print("Tweet publishing finished!")
-        time.sleep(1)
         driver.close()
 
 if __name__ == "__main__":
-    firstRun = True
     while True:
-        if not firstRun is True:
-            for x in range(20):
-                if (x % 10 == 0):
-                    print("Refreshing in", str(20 - x), "seconds")
-                time.sleep(1)
-        else:
-            firstRun = False
+        time.sleep(15)
 
         tweet = getTweets()
-        if not isnew(tweet['url']):
-            print('no new tweet, skipping')
+        if tweet is None:
+            continue
+        if not isNew(tweet['url']):
             continue
         
         topics = reveiwText(tweet['content'])
         if (len(topics) > 0): 
             publishTweet(tweet['url'], constructTweet(topics))
-        else:
-            print("The tweet: \"" + str(tweet['content']) + "\" does not contain missleading information")
