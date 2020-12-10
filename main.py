@@ -105,8 +105,8 @@ def publishTweet(url, tweet):
         driver.get("https://twitter.com/login")
         time.sleep(3)
 
-        driver.find_element_by_xpath("//input[@name='session[username_or_email]']").send_keys("SoftwareBot")
-        driver.find_element_by_xpath("//input[@name='session[password]']").send_keys("}7mdr~7Xa*,$LVn9XY~B.d!")
+        driver.find_element_by_xpath("//input[@name='session[username_or_email]']").send_keys("<<USERNAME>>")
+        driver.find_element_by_xpath("//input[@name='session[password]']").send_keys("<<PASSWORD>>")
         driver.find_element_by_xpath("//div[@data-testid='LoginForm_Login_Button']").click()
         time.sleep(3)
         driver.get(url)
