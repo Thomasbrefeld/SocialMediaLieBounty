@@ -106,16 +106,6 @@ def isnew(link):
 def publishTweet(url, tweet):
     try:
         driver=webdriver.Chrome("chromedriver.exe")
-<<<<<<< HEAD
-=======
-        driver.get("https://twitter.com/login")
-        time.sleep(3)
-
-        driver.find_element_by_xpath("//input[@name='session[username_or_email]']").send_keys("<<USERNAME>>")
-        driver.find_element_by_xpath("//input[@name='session[password]']").send_keys("<<PASSWORD>>")
-        driver.find_element_by_xpath("//div[@data-testid='LoginForm_Login_Button']").click()
-        time.sleep(3)
->>>>>>> 4cc7bfbd427f5cd6d90028d1252779a7e8f7bd03
         driver.get(url)
         WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH,"//div[@aria-label='Reply']"))).click()
         WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/a[1]/div"))).click()
