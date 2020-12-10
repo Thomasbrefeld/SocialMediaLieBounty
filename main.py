@@ -51,10 +51,8 @@ def reveiwText(inputText):
 
 def constructTweet(topics):
     '''
-    This function takes the topics as a list, and
-    returns a tweet to be posted with the topic and
-    links to information about the topics. The links are 
-    taken from topic_to_website.csv file.
+    This function takes the topics as a list, and returns a tweet to be posted with the topic and
+    links to information about the topics. The links are taken from topic_to_website.csv file.
     '''
     msg = " This tweet has topics involving "
 
@@ -83,9 +81,9 @@ def constructTweet(topics):
 
 def getTweets():
     '''
-    getTweets calls snscrape to get new tweets from the defined hashtag, the funcation will save the
-    information to a json file for later use. The funcation will return the json data type of the most
-    recent tweet, if there is no new tweet the function will return None
+    getTweets calls snscrape to get new tweets from the defined hashtag, the function will save the
+    information to a json file for later use. The function will return the json data type of the most
+    recent tweet, if there is no new tweet the function will return None.
     '''
     try:
         os.system("snscrape --json --max-results 1 twitter-hashtag softwareengineeringliebounty >" + jsonFile)
@@ -100,8 +98,9 @@ def getTweets():
 
 def isNew(link):
     '''
-    isNew take a link of a tweet and determines if the tweet has already been anaylised. If so
-    the funcation will return False, but if the tweet is new then the function will return True
+    isNew take a link of a tweet and determines if the tweet has already been analysed. 
+    If so the function will return False, but if the tweet is new then the function 
+    will return True.
     '''
     link = str(link)
 
