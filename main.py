@@ -1,10 +1,14 @@
 import csv
 import os
 import json
+import time
+
 from selenium import webdriver
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
-import time
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 proirTweetsFile = 'logs/proirTweets.txt'
 jsonFile = "logs/tweets.json"
@@ -102,19 +106,15 @@ def isnew(link):
 def publishTweet(url, tweet):
     try:
         driver=webdriver.Chrome("chromedriver.exe")
-        driver.get("https://twitter.com/login")
-        time.sleep(3)
-
-        driver.find_element_by_xpath("//input[@name='session[username_or_email]']").send_keys("SoftwareBot")
-        driver.find_element_by_xpath("//input[@name='session[password]']").send_keys("}7mdr~7Xa*,$LVn9XY~B.d!")
-        driver.find_element_by_xpath("//div[@data-testid='LoginForm_Login_Button']").click()
-        time.sleep(3)
         driver.get(url)
-        time.sleep(3)
-        driver.find_element_by_xpath("//div[@aria-label='Reply']").click()
-        time.sleep(.1)
-
-        driver.find_element_by_class_name('DraftEditor-root').click()
+        WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH,"//div[@aria-label='Reply']"))).click()
+        WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/a[1]/div"))).click()
+        WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH,"//div[@data-testid='LoginForm_Login_Button']")))
+        driver.find_element_by_xpath("//input[@name='session[username_or_email]']").send_keys("<<USERNAME>>")
+        driver.find_element_by_xpath("//input[@name='session[password]']").send_keys("<<PASSWORD>>")
+        driver.find_element_by_xpath("//div[@data-testid='LoginForm_Login_Button']").click()
+        WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH,"//div[@aria-label='Reply']"))).click()
+        WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.CLASS_NAME,'DraftEditor-root'))).click()
         element=driver.find_element_by_class_name('public-DraftEditorPlaceholder-root')
         ActionChains(driver).move_to_element(element).send_keys(str(tweet)).perform()
         driver.find_element_by_xpath("//div[@data-testid='tweetButton']").click()
@@ -122,16 +122,16 @@ def publishTweet(url, tweet):
         print(e)
     finally:
         print("Tweet publishing finished!")
-        time.sleep(2)
+        time.sleep(1)
         driver.close()
 
 if __name__ == "__main__":
     firstRun = True
     while True:
         if not firstRun is True:
-            for x in range(60):
+            for x in range(20):
                 if (x % 10 == 0):
-                    print("Refreshing in", str(60 - x), "seconds")
+                    print("Refreshing in", str(20 - x), "seconds")
                 time.sleep(1)
         else:
             firstRun = False
