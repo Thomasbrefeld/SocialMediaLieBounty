@@ -1,4 +1,5 @@
 # SocialMediaLieBounty
+Demo: https://www.youtube.com/watch?v=Pg9WpQtE084
 
 # Problem Statement
 Social media benefits includes expanding ones social networks and keeping users in touch with peers and far-away friends and family. Social media is active 24/7, millions of users, every user is a potential author, any user can post opinions, share other people's opinions/comments etc. Through social media, news and events happening in any part of the world becomes only a click away or received as an alert. This development has its downside as there are no set down rules or means to filter truth from lies or discourage the peddling of fake news. See references.
