@@ -70,7 +70,7 @@ def constructTweet(topics):
 
         num += 1
     
-    msg += "This might include missleading information, ensure you do you own reasearch at the following website(s): "
+    msg += "This might include misleading information, ensure you do your own research at the following website(s): "
 
     fileInput = readFile(websiteFile) # get the topic links
 
@@ -110,8 +110,8 @@ def publishTweet(url, tweet):
         WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH,"//div[@aria-label='Reply']"))).click()
         WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/a[1]/div"))).click()
         WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH,"//div[@data-testid='LoginForm_Login_Button']")))
-        driver.find_element_by_xpath("//input[@name='session[username_or_email]']").send_keys("<<USERNAME>>")
-        driver.find_element_by_xpath("//input[@name='session[password]']").send_keys("<<PASSWORD>>")
+        driver.find_element_by_xpath("//input[@name='session[username_or_email]']").send_keys("SoftwareBot")
+        driver.find_element_by_xpath("//input[@name='session[password]']").send_keys("}7mdr~7Xa*,$LVn9XY~B.d!")
         driver.find_element_by_xpath("//div[@data-testid='LoginForm_Login_Button']").click()
         WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH,"//div[@aria-label='Reply']"))).click()
         WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.CLASS_NAME,'DraftEditor-root'))).click()
